@@ -408,6 +408,11 @@ class tden_ana(dens_ana_base.dens_ana_base):
 #---
 
     def compute_all_NTO(self):
+        if self.ioptions['selected_states']:
+            state_list = [i for i in self.state_list if i["state_ind"] in self.ioptions['selected_states']]
+            print(f"Analyzing NTOs only of selected states. Excited states selected:{self.ioptions['selected_states']}")
+            self.state_list=state_list
+
         if len(self.state_list) == 0: return
         if not 'tden' in self.state_list[0]: return
 
