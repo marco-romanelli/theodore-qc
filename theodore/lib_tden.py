@@ -408,13 +408,14 @@ class tden_ana(dens_ana_base.dens_ana_base):
 #---
 
     def compute_all_NTO(self):
+
+        if len(self.state_list) == 0: return
+        if not 'tden' in self.state_list[0]: return
+        
         if self.ioptions['selected_states']:
             state_list = [i for i in self.state_list if i["state_ind"] in self.ioptions['selected_states']]
             print(f"Analyzing NTOs only of selected states. Excited states selected:{self.ioptions['selected_states']}")
             self.state_list=state_list
-
-        if len(self.state_list) == 0: return
-        if not 'tden' in self.state_list[0]: return
 
         jmol_orbs = self.ioptions.get('jmol_orbitals')
         if jmol_orbs:
@@ -450,6 +451,11 @@ class tden_ana(dens_ana_base.dens_ana_base):
         """
         if len(self.state_list) == 0: return
         if not 'tden' in self.state_list[0]: return
+        
+        if self.ioptions['selected_states']:
+            state_list = [i for i in self.state_list if i["state_ind"] in self.ioptions['selected_states']]
+            print(f"Analyzing NTOs only of selected states. Excited states selected:{self.ioptions['selected_states']}")
+            self.state_list=state_list
 
         lib_orbkit = orbkit_interface.lib_orbkit(self.ioptions['orbkit_extend'], self.ioptions['orbkit_step'])
         cube_ids = []
