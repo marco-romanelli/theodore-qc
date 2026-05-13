@@ -367,7 +367,7 @@ def hdf5_write(fid,mode='w',gname='',**kwargs):
     All additional keyword arguments specify the input data.
   '''
   for f in hdf5_open(fid,mode=mode):
-    if gname is not '':
+    if gname != '':
       group = f.create_group(gname)
       for i,j in kwargs.items(): 
         group.create_dataset(i,numpy.shape(j),data=j)
