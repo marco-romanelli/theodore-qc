@@ -454,7 +454,7 @@ class tden_ana(dens_ana_base.dens_ana_base):
         
         if self.ioptions['selected_states']:
             state_list = [i for i in self.state_list if i["state_ind"] in self.ioptions['selected_states']]
-            print(f"Analyzing NTOs only of selected states. Excited states selected:{self.ioptions['selected_states']}")
+            print(f"Analyzing p_h densities only of selected states. Excited states selected:{self.ioptions['selected_states']}")
             self.state_list=state_list
 
         lib_orbkit = orbkit_interface.lib_orbkit(self.ioptions['orbkit_extend'], self.ioptions['orbkit_step'])
@@ -547,6 +547,11 @@ class tden_ana(dens_ana_base.dens_ana_base):
         """
         if len(self.state_list) == 0: return
         if not 'tden' in self.state_list[0]: return
+
+        if self.ioptions['selected_states']:
+            state_list = [i for i in self.state_list if i["state_ind"] in self.ioptions['selected_states']]
+            print(f"Analyzing conditional densities only of selected states. Excited states selected:{self.ioptions['selected_states']}")
+            self.state_list=state_list
 
         print("\n*** Computing domain NTOs ... ***")
         if not self.ioptions.get('Om_formula') == 2:
