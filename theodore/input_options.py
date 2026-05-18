@@ -441,7 +441,7 @@ class dens_ana_options(read_options):
         # tden analysis
         self.set_kd('Om_formula', 1, 'How to compute Omega: 0 - Mulliken (simple), 1 - Mulliken, 2 - Lowdin')
         self.set_kd('prop_list', [], 'List of properties for final print out.')
-        self.set_kd('selected_states', [], 'List of preselected states for NTO analysis.')
+        self.set_kd('selected_states', [], 'List of preselected subset of states for which NTOs, etc. will be computed. All other states are ignored.')
         self.set_kd('print_OmAt', False, 'Print the OmAt to .npy file and use for automatic restart')
         self.set_kd('print_OmFrag', True, 'Print out the fragment Omega matrix to an ASCII file')
         self.set_kd('eh_pop', 1, 'Print e/h populations: 1 - for fragments, 2 - also for atoms, 3 - bfs')
