@@ -6,6 +6,7 @@ from __future__ import print_function, division
 from . import units, lib_mo, error_handler
 import numpy
 import os, struct
+import re
 
 
 class file_parser_base:
@@ -371,8 +372,8 @@ class file_parser_escf(file_parser_base):
     def read(self, mos):
         state_list, restr, act_occ, act_virt = self.ret_conf_tddft(rfile=self.ioptions.get('rfile'))
 
-        # print("DEBUG:",restr,act_virt,act_occ)
-        # print("DEBUG:",state_list)
+        print("DEBUG:",restr,act_virt,act_occ)
+        print("DEBUG:",state_list)
 
         if restr:  #RKS/RHF response calculations
             nocc={}
@@ -542,6 +543,16 @@ class file_parser_escf(file_parser_base):
         return state_list
 
     def ret_conf_tddft(self, rfile):
+
+        # #Checking first which TURBOMOLE version is used. Output of MOs info changed from V8.0 unfortunately!
+        # header=open(rfile,'r').readlines()[0:20]
+        # version = None
+        # for line in header:
+        #     m = re.search(r'TURBOMOLE rev\.\s*V(\d+)-', line)
+        #     if m:
+        #         version = int(m.group(1))
+        #         break
+
         rlines = open(rfile, 'r').readlines()[100:]
         ret_list = []
         occ_orb = False # section of the file
@@ -559,12 +570,19 @@ class file_parser_escf(file_parser_base):
                 self.ioptions['TDA']=True
                 print("Detected TDA approximation.")
             # Reading n. of occupied and virtual orbitals for UKS or RKS. 
-            if restr is False and 'orbitals in total:  alpha spin   beta spin' in line:
-                act_occ.extend(map(int, rlines[nr+3].split()[-2:]))
-                act_virt.extend(map(int, rlines[nr+4].split()[-2:]))
-            elif restr is True and 'orbitals in total:' in line:
-                act_occ.append(int(rlines[nr+3].split()[-1]))
-                act_virt.append(int(rlines[nr+4].split()[-1]))
+            # if version > 7: #Older TURBOMOLE versions have different output for MOs summary
+            #     if restr is False and 'orbitals in total:  alpha spin   beta spin' in line:
+            #         act_occ.extend(map(int, rlines[nr+3].split()[-2:]))
+            #         act_virt.extend(map(int, rlines[nr+4].split()[-2:]))
+            #     elif restr is True and 'orbitals in total:' in line:
+            #         act_occ.append(int(rlines[nr+3].split()[-1]))
+            #         act_virt.append(int(rlines[nr+4].split()[-1]))
+            # else:
+            if 'number of non-frozen orbitals' in line:
+                    tmp_orb=int(line.split()[-1]) #Total n. of active orbitals (either alpha or beta channel)
+                    tmp_occ=int(rlines[nr+1].split()[-1]) # Total n. of acive occupied orbitals (either alpha or beta channel)
+                    act_occ.append(tmp_occ)
+                    act_virt.append(tmp_orb-tmp_occ)
             #Extracting excitations
             if 'excitation' in line and not 'vector' in line and not 'energies' in line:
                 ret_list.append({})

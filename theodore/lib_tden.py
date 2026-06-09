@@ -436,7 +436,9 @@ class tden_ana(dens_ana_base.dens_ana_base):
                     cbfid = lib_orbkit.cube_file_creator(state, U, lam, Vt, self.mos,minlam=self.ioptions['min_occ'],numproc=self.ioptions.get('numproc'))
                     cube_ids.append(cbfid)
                 else:
-                    print(f"WARNING: no singular values above the default min_occ={self.ioptions['min_occ']} found. No NTO cube files will be created for this state.")
+                    print(f"\nWARNING: no singular values above the default min_occ={self.ioptions['min_occ']} found. No NTO cube files will be created for this state.")
+                    print(f"WARNING: specify otherwise a smaller min_occ in the input file.")
+
 
         if self.ioptions.get('vmd_ntos'):
             print("VMD network for NTOs")
@@ -465,7 +467,9 @@ class tden_ana(dens_ana_base.dens_ana_base):
                 cbfid = lib_orbkit.compute_p_h_dens(state, U, lam, Vt, self.mos, minlam=self.ioptions['min_occ'],numproc=self.ioptions.get('numproc'))
                 cube_ids.append(cbfid)
             else:
-                print(f"WARNING: no singular values above the default min_occ={self.ioptions['min_occ']} found. No p_h_dens will be created for this state.")
+                print(f"\nWARNING: no singular values above the default min_occ={self.ioptions['min_occ']} found. No p_h_dens will be created for this state.")
+                print(f"WARNING: specify otherwise a smaller min_occ in the input file.")
+
 
         if self.ioptions.get('vmd_ph_dens'):
             print("VMD network for particle/hole densities")
