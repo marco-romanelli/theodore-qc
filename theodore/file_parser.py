@@ -372,8 +372,8 @@ class file_parser_escf(file_parser_base):
     def read(self, mos):
         state_list, restr, act_occ, act_virt = self.ret_conf_tddft(rfile=self.ioptions.get('rfile'))
 
-        print("DEBUG:",restr,act_virt,act_occ)
-        print("DEBUG:",state_list)
+        #print("DEBUG:",restr,act_virt,act_occ)
+        #print("DEBUG:",state_list)
 
         if restr:  #RKS/RHF response calculations
             nocc={}
